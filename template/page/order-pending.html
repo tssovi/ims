@@ -1,0 +1,100 @@
+{% extends 'layout/__base.html' %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                        {% if pending_orders %}
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title">Pending Deliverables</h4>
+                                    <p class="category">Deliverables that have been ordered</p>
+                                </div>
+                                <div class="content table-responsive table-full-width">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <th>Sub Material Name</th>
+                                            <th>Order Name</th>
+                                            <th>Client</th>
+                                            <th>Order Quantity</th>
+                                            <th>Issued At</th>
+                                            <th>Received Quantity</th>
+                                            <th class="text-right">Status</th>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in pending_orders %}
+                                            <tr>
+                                                <td>{{ i.sub_material.name }}</td>
+                                                <td>{{ i.order.name }}</td>
+                                                <td>{{ i.order.client }}</td>
+                                                <td>{{ i.order_quantity }}</td>
+                                                <td>{{ i.created }}</td>
+                                                <td>
+                                                    <input class="form-control"
+                                                       type="number"
+                                                       id="order_{{ i.id }}"
+                                                       placeholder="ex: "{{ i.amount }}/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <a href="#" id='received_{{ i.id }}' rel="tooltip" title="Received" class="btn btn-info btn-simple">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    {{ block.super }}
+    <script>
+    $("a[id^='received_']").on('click', function () {
+        var received_id = $(this).attr('id');
+        var parsed_id = received_id.substr(received_id.indexOf('_') + 1);
+
+        $.ajax({
+            url : "{% url 'order-pending' %}", // the endpoint
+            type : "POST", // http method
+            data : {
+                id : parsed_id,
+                quantity: $('#order_'+parsed_id).val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                if (json){
+                    $('#'+received_id).closest('tr').remove();
+                    showNotification('top', 'right', 'Successfully Received the Product', 'success', "pe-7s-check");
+                } else {
+                    showNotification('top', 'right', 'Failed to Add the Product', 'danger', "pe-7s-attention");
+                }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                showNotification('top', 'right', 'Failed to Add the Product', 'danger', "pe-7s-attention");
+            }
+        });
+        return false;
+    });
+
+
+    </script>
+{% endblock %}

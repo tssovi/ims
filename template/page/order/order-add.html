@@ -1,0 +1,18 @@
+{% extends 'layout/__base.html' %}
+
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        {% include 'component/_create_order_base.html' %}
+                    </div>
+                </div>
+            </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}

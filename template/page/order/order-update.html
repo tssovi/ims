@@ -1,0 +1,94 @@
+{% extends 'layout/__base.html' %}
+
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="card card-wizard" id="wizardCard">
+                            {% include 'component/_create_order.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+
+        <script type="text/javascript">
+            $().ready(function(){
+                $('#wizardCard').bootstrapWizard({
+                    tabClass: 'nav nav-pills',
+                    nextSelector: '.btn-next',
+                    previousSelector: '.btn-back',
+                    onNext: function(tab, navigation, index) {
+
+                    },
+                    onInit : function(tab, navigation, index){
+                        //check number of tabs and fill the entire row
+                        var $total = navigation.find('li').length;
+                        $width = 100/$total;
+
+                        $display_width = $(document).width();
+
+                        if($display_width < 600 && $total > 3){
+                           $width = 50;
+                        }
+
+                        navigation.find('li').css('width',$width + '%');
+                    },
+                    onTabClick : function(tab, navigation, index){
+                        // Disable the posibility to click on tabs
+                        return false;
+                    },
+                    onTabShow: function(tab, navigation, index) {
+                        var $total = navigation.find('li').length;
+                        var $current = index+1;
+
+                        var wizard = navigation.closest('.card-wizard');
+
+                        // If it's the last tab then hide the last button and show the finish instead
+                        if($current >= $total) {
+                            $(wizard).find('.btn-next').hide();
+                            $(wizard).find('.btn-finish').show();
+                        } else {
+                            $(wizard).find('.btn-next').show();
+                            $(wizard).find('.btn-finish').hide();
+                        }
+                    }
+
+                });
+
+            });
+
+            $("[id^=order-form_]").submit(function (e) {
+                e.preventDefault();
+                var order_id = $(this).attr('id').split('_')[1];
+                $.ajax({
+                    type: "POST",
+                    url: "/order/update/"+order_id,
+                    data: $(this).serialize(),
+                    success: function(data){
+                        if (data.success){
+                            showNotification('top', 'right', 'Successfullly Added ', 'success', "pe-7s-check");
+                        } else {
+                            showNotification('top', 'right', 'Could not Add ', 'danger', "pe-7s-attention");
+                        }
+                    },
+                    error: function() {
+                        showNotification('top', 'right', 'Could not Add ', 'danger', "pe-7s-attention");
+                    }
+                });
+            });
+            function onFinish(){
+                window.location.href = {% url 'order' %};
+            }
+    </script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'layout/__base.html' %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="card card-calendar">
+                                    <div class="content">
+                                        <div id="fullCalendar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        $().ready(function(){
+            $calendar = $('#fullCalendar');
+
+            today = new Date();
+            y = today.getFullYear();
+            m = today.getMonth();
+            d = today.getDate();
+
+            $calendar.fullCalendar({
+                header: {
+                    left: 'title',
+                    center: 'month,agendaWeek,agendaDay',
+                    right: 'prev,next today'
+                },
+                defaultDate: today,
+                selectable: true,
+                selectHelper: true,
+                titleFormat: {
+                    month: 'MMMM YYYY', // September 2015
+                    week: "MMMM D YYYY", // September 2015
+                    day: 'D MMM, YYYY'  // Tuesday, Sep 8, 2015
+                },
+                select: function(start, end) {
+                    // on select we show the Sweet Alert modal with an input
+                    swal({
+                        title: 'Create an Event',
+                        html: '<br><input class="form-control" placeholder="Event Title" id="input-field">',
+                        showCancelButton: true,
+                        closeOnConfirm: true
+                    }, function() {
+
+                        var eventData;
+                        event_title = $('#input-field').val();
+
+                        if (event_title) {
+                            eventData = {
+                                title: event_title,
+                                start: start,
+                                end: end
+                            };
+                            $calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
+                        }
+
+                        $calendar.fullCalendar('unselect');
+
+                    });
+                },
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+
+
+                // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
+                events: [
+                    {% for i in orders %}
+                    {
+                        title: '{{ i.name }}',
+                        start: new Date({{ i.created_at|date:"Y" }}, {{ i.created_at|date:"m" }}-1, {{ i.created_at|date:"d" }}, {{ i.created_at|date:"H" }}, {{ i.created_at|date:"i" }}),
+                        className: 'event-blue'
+                    },
+                    {
+                        title: '{{ i.name }}',
+                        start: new Date({{ i.delivery_date|date:"Y" }}, {{ i.delivery_date|date:"m" }}-1, {{ i.delivery_date|date:"d" }}),
+                        className: 'event-red'
+                    },
+                    {% endfor %}
+
+                    {% for i in productions %}
+                        {% if i.exchange_type == 'in' %}
+                        {
+                            title: '{{ i.order.name }}',
+                            start: new Date({{ i.exchange_date|date:"Y" }}, {{ i.exchange_date|date:"m" }}-1, {{ i.exchange_date|date:"d" }}, {{ i.exchange_date|date:"H" }}, {{ i.exchange_date|date:"i" }}),
+                            className: 'event-azure'
+                        },
+                        {% else %}
+                        {
+                            title: '{{ i.order.name }}',
+                            start: new Date({{ i.exchange_date|date:"Y" }}, {{ i.exchange_date|date:"m" }}-1, {{ i.exchange_date|date:"d" }}),
+                            className: 'event-green'
+                        },
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for i in bills %}
+                        {
+                            title: '{{ i.client }}',
+                            start: new Date({{ i.exchange_date|date:"Y" }}, {{ i.exchange_date|date:"m" }}-1, {{ i.exchange_date|date:"d" }}, {{ i.exchange_date|date:"H" }}, {{ i.exchange_date|date:"i" }}),
+                            className: 'event-orange'
+                        },
+
+                    {% endfor %}
+                ]
+            });
+        });
+    </script>
+{% endblock %}

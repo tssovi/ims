@@ -1,0 +1,89 @@
+{% extends 'layout/__base.html' %}
+{% load humanize %}
+
+<head>
+    <title>Billing Report</title>
+</head>
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="container-fluid">
+                <div style="text-align: center">
+                    <h2 class="h2" style="text-decoration: underline">Bill Summary</h2>
+
+                    <h4 class="h4">Total Generated Bill: {{ total_generated_bill.total_generated_bill|floatformat:"0"|intcomma }}</h4>
+                    <h4 class="h4">Total Received Bill: {{ total_received_bill.total_received_bill|floatformat:"0"|intcomma }}</h4>
+                    <h4 class="h4">Total Pending Bill: <span id="total_pending_bill"> {{ total_pending|floatformat:"0"|intcomma }} </span></h4>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container-fluid">
+                <table class="responsive-table">
+                    <caption>Last Month Bill Summary</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Receive Amount</th>
+                            <th scope="col">Pending Amount</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td>Total Bill</td>
+                            <td>{{ total_received_bill.total_received_bill|floatformat:"2"|intcomma }}</td>
+                            <td>{{ total_pending|floatformat:"0"|intcomma }}</td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for i in bills %}
+                            <tr>
+                                <th scope="row">{{ i.client__name }}</th>
+                                <td data-title="Receive Amount">{{ i.total_received_amount|floatformat:"0"|intcomma }}</td>
+                                {% for j in pending %}
+                                    {% if i.client == j.client_id %}
+                                        <td data-title="Pending Amount">{{ j.pending_bill|floatformat:"0"|intcomma  }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container-fluid">
+                <table class="responsive-table">
+                    <caption>Last Month Transaction History</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Transaction Date</th>
+                            <th scope="col">Transaction Amount</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Total Transaction Amount</td>
+                            <td> {{ total_received_bill.total_received_bill|floatformat:"2"|intcomma }}</td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for i in transaction_histories %}
+                            <tr>
+                                <th scope="row">{{ i.client.name }}</th>
+                                <td data-title="Transaction Date">{{ i.exchange_date }}</td>
+                                <td data-title="Transaction Amount">{{ i.received_amount|floatformat:"0"|intcomma }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'layout/__base.html' %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                <div class="content">
+                                    <div class="toolbar">
+                                        </div>
+                                        <div class="fresh-datatables">
+                                            <table id="datatables_pendingprod" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SL</th>
+                                                        <th>Job Name</th>
+                                                        <th>Client</th>
+                                                        <th>Created At</th>
+                                                        <th>Quantity</th>
+                                                        <th>Production Count</th>
+                                                        <th class="text-right">Done</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>SL</th>
+                                                        <th>Job Name</th>
+                                                        <th>Client</th>
+                                                        <th>Created At</th>
+                                                        <th>Quantity</th>
+                                                        <th>Production Count</th>
+                                                        <th class="text-right">Done</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    {% for i in orders %}
+                                                    <tr>
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ i.name }}</td>
+                                                        <td>{{ i.client }}</td>
+                                                        <td>{{ i.created_at }}</td>
+                                                        <td>{{ i.amount }}</td>
+                                                        <td><input class="form-control"
+                                                               type="number"
+                                                               id="production_{{ i.id }}"
+                                                               placeholder="ex: "{{ i.amount }}/>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <a href="#" id='received_{{ i.id }}' rel="tooltip" title="Received" class="btn btn-info btn-simple">
+                                                                <i class="fa fa-check"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    {{ block.super }}
+    <script>
+    $("a[id^='received_']").on('click', function () {
+        var received_id = $(this).attr('id');
+        var parsed_id = received_id.substr(received_id.indexOf('_') + 1);
+        $.ajax({
+            url : "{% url 'product-pending' %}", // the endpoint
+            type : "POST", // http method
+            data : {
+                id : parsed_id,
+                quantity : $('#production_'+parsed_id).val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                if (json){
+                    showNotification('top', 'right', 'Successfully Collected the product', 'success', "pe-7s-check");
+                    $('#'+received_id).closest('tr').remove();
+                } else {
+                    showNotification('top', 'right', 'Failed to collect the product', 'danger', "pe-7s-attention");
+                }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                showNotification('top', 'right', 'Failed to collect the product', 'danger', "pe-7s-attention");
+            }
+        });
+        return false;
+    });
+
+
+    </script>
+{% endblock %}

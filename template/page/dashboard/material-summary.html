@@ -1,0 +1,139 @@
+{% extends 'layout/__base.html' %}
+{% load math %}
+
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+{#                                <h4 class="title text-center">Page Subcategories</h4>#}
+                                <br />
+                            {{ jobs }}
+                                <div class="nav-container">
+                                    <ul class="nav nav-icons" role="tablist">
+                                        <li class="active">
+                                            <a href="#materials-chart" role="tab" data-toggle="tab">
+                                                <i class="fa fa-bar-chart"></i><br>
+                                                Materials Chart
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#materials-list" role="tab" data-toggle="tab">
+                                                <i class="fa fa-list"></i><br>
+                                                Materials List
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="materials-list">
+                                        <div class="card">
+                                            <div class="content">
+{#                                                <div class="header">#}
+{#                                                    <h4 class="title">Pending Bills For All Clients List View</h4>#}
+{#                                                    <p class="category"></p>#}
+{#                                                </div>#}
+                                                <div class="toolbar">
+                                                </div>
+                                                <div class="fresh-datatables">
+                                                    <table id="datatables_materials" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>SL</th>
+                                                                <th>Sub Material</th>
+                                                                <th>Available Weight</th>
+{#                                                                <th>Receive Amount</th>#}
+{#                                                                <th>Pending Amount</th>#}
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>SL</th>
+                                                                <th>Sub Material</th>
+                                                                <th>Available Weight</th>
+{#                                                                <th>Receive Amount</th>#}
+{#                                                                <th>Pending Amount</th>#}
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {% for i in materials %}
+                                                            <tr>
+                                                                <td>{{ forloop.counter }}</td>
+                                                                <td>{{ i.sub_material__name }}</td>
+                                                                <td>{{ i.total_weight }}</td>
+{#                                                                <td>{{ i.total_rcv }}</td>#}
+{#                                                                <td>{{ i.total_bill|subtract:i.total_rcv }}</td>#}
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane active" id="materials-chart">
+
+                                        <div class="col-md-12">
+                                            <div class="card ">
+                                                <div class="header">
+                                                    <h4 class="title">Materials Chart</h4>
+                                                </div>
+                                                <div class="content">
+                                                    <div id="chartMaterials" class="ct-chart"></div>
+                                                </div>
+                                                <div class="footer">
+                                                    <div class="legend">
+                                                        <i class="fa fa-circle text-info"></i> Available Materials
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end tab content -->
+
+                            </div> <!-- end col-md-8 -->
+
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function() {
+            new Chartist.Bar('#chartMaterials', {
+                labels: [{% for i in materials %}'{{ i.sub_material__name }}' , {% endfor %} ],
+                series: [
+                    [{% for i in materials %}{{ i.total_weight }} , {% endfor %}],
+                ]
+            },
+            {
+                seriesBarDistance: 10,
+                axisX: {
+                    offset: 60
+                },
+                height: "350px",
+                axisY: {
+                    offset: 80,
+                    labelInterpolationFnc: function(value) {
+                        return value + ' KG'
+                    },
+                    scaleMinSpace: 15
+                }
+            });
+        });
+    </script>
+{% endblock %}

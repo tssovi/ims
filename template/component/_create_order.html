@@ -1,0 +1,101 @@
+<div class="header text-center">
+    <h3 class="title">{{ order.name }}</h3>
+    <p class="category">{{ order.client.name }}</p>
+</div>
+
+<div class="content">
+    <ul class="nav">
+    {% for i in materials %}
+        <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ i.material.name }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+        {% for i in materials %}
+        <div class="tab-pane" id="tab{{ forloop.counter }}">
+            <h4 class="text-center">
+                {{ i.material.name }}
+            </h4>
+            <br/>
+            <form id="order-form_{{ order.id }}" method="post" data-href="{% url 'order-update' order.id %}">
+                {% csrf_token %}
+                <input hidden name="material-id" value="{{ i.material.id }}"/>
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="form-group">
+                            <select required data-title="Select Sub Material" name="sub-material-id" class="selectpicker" data-style="btn-block">
+                                {% for j in sub_materials %}
+                                    {% if j.material_id == i.material.id %}
+                                    <option value="{{ j.id }}">{{ j.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <input class="form-control"
+                                   type="number"
+                                   name="weight"
+                                   placeholder="Required Quantity"
+                                   required
+                            />
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <h5 class="text-center">Select Rolls</h5>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="content table-responsive table-full-width">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <th>Roll ID</th>
+                                    <th>Sub Material</th>
+                                    <th>Weight</th>
+                                    <th>Type</th>
+                                    <th>Select</th>
+                                    <th>Amount</th>
+                                </thead>
+                                <tbody>
+                                    {% for j in inventory %}
+                                        {% if j.sub_material.material_id == i.material.id %}
+                                        <tr>
+                                            <td>{{ j.roll_id }}</td>
+                                            <td>{{ j.sub_material.name }}</td>
+                                            <td>{{ j.available_weight }}</td>
+                                            <td>In {{ j.status }}</td>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" name="take_stock_{{ j.id }}" id="take_stock_{{ j.id }}">
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input class="form-control"
+                                                    type="number"
+                                                    name="requirement_{{ j.id }}"
+                                                    id="requirement_{{ j.id }}"
+                                                    min="1"
+                                                    max="{{ j.available_weight }}"
+                                                    onkeyup="checkCheckBox(this)"
+                                                    placeholder="ex: 100"
+                                                />
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-default btn-fill btn-next btn-wd">Confirm</button>
+                            <button type="submit" class="btn btn-default btn-fill btn-finish btn-wd" onclick="onFinish()">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>

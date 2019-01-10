@@ -1,0 +1,160 @@
+{% extends 'layout/__base.html' %}
+
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            {% include 'form/order.html' %}
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+{##}
+{#{% block js %}#}
+{#    {{ block.super }}#}
+{#    {% if not order %}#}
+{##}
+{##}
+{#        <script type="text/javascript">#}
+{#        $().ready(function(){#}
+{##}
+{#            var $validator = $("#wizardForm").validate({#}
+{#    		  rules: {#}
+{#    		    email: {#}
+{#                    required: true,#}
+{#                    email: true,#}
+{#                    minlength: 5#}
+{#    		    },#}
+{#    		    first_name: {#}
+{#    		        required: false,#}
+{#                    minlength: 5#}
+{#    		    },#}
+{#    		    last_name: {#}
+{#    		        required: false,#}
+{#                    minlength: 5#}
+{#    		    },#}
+{#    		    website: {#}
+{#    		        required: true,#}
+{#                    minlength: 5,#}
+{#                    url: true#}
+{#    		    },#}
+{#    		    framework: {#}
+{#        		    required: false,#}
+{#        		    minlength: 4#}
+{#    		    },#}
+{#    		    cities: {#}
+{#        		    required: true#}
+{#    		    },#}
+{#    		    price:{#}
+{#        		    number: true#}
+{#    		    }#}
+{#    		  }#}
+{#    		});#}
+{##}
+{##}
+{##}
+{#            // you can also use the nav-pills-[blue | azure | green | orange | red] for a different color of wizard#}
+{##}
+{#            $('#wizardCard').bootstrapWizard({#}
+{#            	tabClass: 'nav nav-pills',#}
+{#            	nextSelector: '.btn-next',#}
+{#                previousSelector: '.btn-back',#}
+{#            	onNext: function(tab, navigation, index) {#}
+{#            		var $valid = $('#wizardForm').valid();#}
+{##}
+{#            		if(!$valid) {#}
+{#            			$validator.focusInvalid();#}
+{#            			return false;#}
+{#            		}#}
+{#            	},#}
+{#                onInit : function(tab, navigation, index){#}
+{##}
+{#                    //check number of tabs and fill the entire row#}
+{#                    var $total = navigation.find('li').length;#}
+{#                    $width = 100/$total;#}
+{##}
+{#                    $display_width = $(document).width();#}
+{##}
+{#                    if($display_width < 600 && $total > 3){#}
+{#                       $width = 50;#}
+{#                    }#}
+{##}
+{#                    navigation.find('li').css('width',$width + '%');#}
+{#                },#}
+{#                onTabClick : function(tab, navigation, index){#}
+{#                    // Disable the posibility to click on tabs#}
+{#                    return false;#}
+{#                },#}
+{#                onTabShow: function(tab, navigation, index) {#}
+{#                    var $total = navigation.find('li').length;#}
+{#                    var $current = index+1;#}
+{##}
+{#                    var wizard = navigation.closest('.card-wizard');#}
+{##}
+{#                    // If it's the last tab then hide the last button and show the finish instead#}
+{#                    if($current >= $total) {#}
+{#                        $(wizard).find('.btn-next').hide();#}
+{#                        $(wizard).find('.btn-finish').show();#}
+{#                    } else if($current == 1){#}
+{#                        $(wizard).find('.btn-back').hide();#}
+{#                    } else {#}
+{#                        $(wizard).find('.btn-back').show();#}
+{#                        $(wizard).find('.btn-next').show();#}
+{#                        $(wizard).find('.btn-finish').hide();#}
+{#                    }#}
+{#                }#}
+{##}
+{#            });#}
+{##}
+{#        });#}
+{##}
+{#        function onFinishWizard(){#}
+{#            //here you can do something, sent the form to server via ajax and show a success message with swal#}
+{##}
+{#            swal("Good job!", "You clicked the finish button!", "success");#}
+{#        }#}
+{#    </script>#}
+{#    <script>#}
+{#        function order_checkout(material_id){#}
+{#            $.ajax({#}
+{#                url : "{% url 'order-create' id=id %}", // the endpoint#}
+{#                type : "POST", // http method#}
+{#                data : {#}
+{#                    order : {{ id }},#}
+{#                    sub_material : $("#sub_material_"+material_id).val(),#}
+{#                    quantity : $("#weight_"+material_id).val(),#}
+{#                    csrfmiddlewaretoken: '{{ csrf_token }}'#}
+{#                }, // data sent with the post request#}
+{##}
+{#                // handle a successful response#}
+{#                success : function(json) {#}
+{#                    $("#sub_material_"+material_id).val('');#}
+{#                    $("#weight_"+material_id).val('');#}
+{#                    if (json) {#}
+{#                        showNotification('top', 'right', 'Successfully Added the Order', 'success', "pe-7s-check");#}
+{#                    } else {#}
+{#                        showNotification('top', 'right', 'Failed to Add the Order', 'danger', "pe-7s-attention");#}
+{#                    }#}
+{#                    $("#ordermodal_"+material_id).modal('toggle');#}
+{#                },#}
+{##}
+{#                // handle a non-successful response#}
+{#                error : function(xhr,errmsg,err) {#}
+{#                    $("#sub_material_"+material_id).val('');#}
+{#                    $("#weight_"+material_id).val('');#}
+{#                    showNotification('top', 'right', 'Failed to Add the Order', 'danger', "pe-7s-attention");#}
+{#                }#}
+{#            });#}
+{#        }#}
+{#    $("button[id^='placeorder_']").on('click', function() {#}
+{#        const received_id = $(this).attr('id');#}
+{#        const parsed_id = received_id.substr(received_id.indexOf('_') + 1);#}
+{#        order_checkout(parsed_id);#}
+{#    });#}
+{##}
+{#    </script>#}
+{#    {% endif %}#}
+{##}
+{##}
+{#{% endblock %}#}

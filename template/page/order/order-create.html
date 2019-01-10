@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            {% if order %}
+                {% include 'component/_create_order_base.html' %}
+            {% else %}
+{#                <form method="post" action="{% url 'order-create' id=id %}">#}
+                    {% csrf_token %}
+{#                    {% for i in materials %}#}
+                        <div class="card card-wizard" id="wizardCard">
+                            <form id="wizardForm" method="" action="">
+                                {% include 'component/_create_order.html' with material=i id=forloop.counter %}
+                            </form>
+                        </div>
+{#                    {% endfor %}#}
+                    <div class="text-center">
+                        <button type="submit" name='_add' class="btn btn-fill btn-lg btn-success">Confirm Order</button>
+                    </div>
+{#                </form>#}
+            {% endif %}
+        </div>
+    </div>
+</div>

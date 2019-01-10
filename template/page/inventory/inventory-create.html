@@ -1,0 +1,94 @@
+{% extends 'layout/__base.html' %}
+{% load math %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                        <form method="post" action="{% url 'inventory-create' %}">
+                        {% csrf_token %}
+                            <div class="card">
+                                <div class="header">Add Stock in Inventory</div>
+                                <div class="content">
+                                    {% if requisition %}
+                                    <div class="form-group">
+                                        <select data-title="Pending Requisition (Optional)" name="requisition" class="selectpicker" data-style="btn-block">
+                                            {% for i in requisition %}
+                                                <option value="{{ i.id }}">{{ i.sub_material.name }}: {{ i.get_remaining_quantity }} kg</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <select required data-title="Select Sub Material" id="material_list" name="sub-material" class="selectpicker" onchange="showDiv(this)" data-style="btn-block">
+                                            {% for i in sub_materials %}
+                                                <option value="{{ i.id }}_{{ i.material.type }}">{{ i.name }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                    <div id="roll" class="form-group">
+                                        <label class="control-label">Roll ID<star>*</star></label>
+                                        <input class="form-control"
+                                               type="text"
+                                               name="roll_id"
+                                               id="roll_id"
+                                               placeholder="ex: ABC-12-219-23"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Weight (kg)<star>*</star></label>
+                                        <input required class="form-control"
+                                               type="number"
+                                               step="0.01"
+                                               name="weight"
+                                               placeholder="ex: 1000"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox">
+                                            <input type="checkbox" data-toggle="checkbox" name="type" checked>
+                                            Local Material
+                                        </label>
+                                    </div>
+
+
+                                    <div class="text-right">
+                                        <button name="_save" class="btn btn-fill btn-success">Save</button>&nbsp;&nbsp;
+                                        <button name="_save_and_add" class="btn btn-fill btn-info">Save and Add Another</button>
+                                    </div>
+                                </div>
+                            </div> <!-- end card -->
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% include 'component/_footer.html' %}
+    </div>
+</div>
+{% endblock %}
+{#{% block js %}#}
+{#<script>#}
+{#    document.getElementById('material_list').addEventListener('change', function () {#}
+{#    var material_type = this.value.split("_");;#}
+{##}
+{#    var style = material_type[1] == 'roll' ? 'block' : 'none';#}
+{#    document.getElementById('roll').style.display = style;#}
+{#{);#}
+{#        function showDiv(elem){#}
+{#            var material_type = elem.value.split('_');#}
+{#            if(material_type[1] == 'roll')#}
+{#                document.getElementById('roll').style.display = "block";#}
+{#            else#}
+{#                document.getElementById('roll').style.display = "none";#}
+{#        }#}
+{#</script>#}
+{#{% endblock %}#}
+
+
+

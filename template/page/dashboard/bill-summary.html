@@ -1,0 +1,149 @@
+{% extends 'layout/__base.html' %}
+{% load math %}
+
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+{#                                <h4 class="title text-center">Page Subcategories</h4>#}
+                                <br />
+                                <div class="nav-container">
+                                    <ul class="nav nav-icons" role="tablist">
+                                        <li class="active">
+                                            <a href="#pendingbills-chart" role="tab" data-toggle="tab">
+                                                <i class="fa fa-bar-chart"></i><br>
+                                                Pending Bills Chart
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#pendingbills-list" role="tab" data-toggle="tab">
+                                                <i class="fa fa-list"></i><br>
+                                                Pending Bills List
+                                            </a>
+                                          </li>
+                                    </ul>
+                                </div>
+
+
+
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="pendingbills-list">
+                                        <div class="col-md-12">
+
+                                            <div class="card">
+                                                <div class="content">
+    {#                                                <div class="header">#}
+    {#                                                    <h4 class="title">Pending Bills For All Clients List View</h4>#}
+    {#                                                    <p class="category"></p>#}
+    {#                                                </div>#}
+                                                    <div class="toolbar">
+                                                    </div>
+                                                    <div class="fresh-datatables">
+                                                        <table id="datatables_pendingbills" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>SL</th>
+                                                                    <th>Client</th>
+                                                                    <th>Bill Amount</th>
+                                                                    <th>Received Amount</th>
+                                                                    <th>Pending Amount</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>SL</th>
+                                                                    <th>Client</th>
+                                                                    <th>Bill Amount</th>
+                                                                    <th>Received Amount</th>
+                                                                    <th>Pending Amount</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                {% for i in bills %}
+                                                                <tr>
+                                                                    <td>{{ forloop.counter }}</td>
+                                                                    <td>{{ i.client.name }}</td>
+                                                                    <td>{{ i.total_bill }}</td>
+                                                                    <td>{{ i.received_bill }}</td>
+                                                                    <td>{{ i.total_bill|subtract:i.received_bill }}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane active" id="pendingbills-chart">
+                                        <div class="col-md-12">
+                                            <div class="card ">
+                                                <div class="header">
+                                                    <h4 class="title">Bills Chart</h4>
+                                                    <p class="category">All Bills Including Taxes</p>
+                                                </div>
+                                                <div class="content">
+                                                    <div id="chartBills" class="ct-chart"></div>
+                                                </div>
+                                                <div class="footer">
+                                                    <div class="legend">
+                                                        <i class="fa fa-circle text-info"></i> Total Bill Amount
+                                                        <i class="fa fa-circle text-danger"></i> Total Receive Amount
+                                                        <i class="fa fa-circle text-warning"></i> Total Pending Amount
+                                                    </div>
+{#                                                    <hr>#}
+{#                                                    <div class="stats">#}
+{#                                                        <i class="fa fa-check"></i> Data information certified#}
+{#                                                    </div>#}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end tab content -->
+
+                            </div> <!-- end col-md-8 -->
+
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function() {
+            new Chartist.Bar('#chartBills', {
+                labels: [{% for i in bills %}'{{ i.client.name }}' , {% endfor %} ],
+                series: [
+                    [{% for i in bills %}{{ i.total_bill }} , {% endfor %}],
+                    [{% for i in bills %}{{ i.received_bill }} , {% endfor %}],
+                    [{% for i in bills %}{{ i.total_bill|subtract:i.received_bill }} , {% endfor %}]
+                ]
+            },
+            {
+                seriesBarDistance: 10,
+                axisX: {
+                    offset: 60
+                },
+                height: "350px",
+                axisY: {
+                    offset: 80,
+                    labelInterpolationFnc: function(value) {
+                        return value + ' BDT'
+                    },
+                    scaleMinSpace: 15
+                }
+            });
+        });
+    </script>
+{% endblock %}

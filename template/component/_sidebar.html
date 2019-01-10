@@ -1,0 +1,168 @@
+{% load staticfiles %}
+<div class="sidebar" data-color="black" data-image="{% static 'img/sidebar-2.jpg' %}">
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <div class="logo-text">
+                Asia Foils
+            </div>
+        </div>
+		<div class="logo logo-mini">
+			<div class="logo-text">
+                AF
+            </div>
+		</div>
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img alt="{{ user_profile.avatar }}" src="{% static 'img/default-avatar.png' %}" />
+                </div>
+                <div class="info">
+                    <a class="collapsed">
+                        {{ user.username }}
+                    </a>
+                </div>
+            </div>
+            <ul class="nav">
+
+                {% if request.user.profile.is_admin %}
+                    <li {% if active == 1 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#dashboard">
+                            <i class="pe-7s-home"></i>
+                            <p>Dashboard
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="dashboard">
+                            <ul class="nav">
+                                <li><a href="{% url 'dashboard' %}">Summary</a></li>
+                                <li><a href="{% url 'bill-summary' %}">Pending Bills</a></li>
+                                <li><a href="{% url 'material-summary' %}">Material Status</a></li>
+                                <li><a href="{% url 'job-summary' %}">Job Status</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_office %}
+                    <li {% if active == 2 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#client">
+                            <i class="pe-7s-users"></i>
+                            <p>Client
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+
+                        <div class="collapse" id="client">
+                            <ul class="nav">
+                                <li><a href="{% url 'client' %}">Client List</a></li>
+                                <li><a href="{% url 'client-create' %}">Add Client</a></li>
+                            </ul>
+                        </div>
+
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_office %}
+                    <li {% if active == 3 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#material">
+                            <i class="pe-7s-tools"></i>
+                            <p>Materials
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="material">
+                            <ul class="nav">
+                                <li><a href="{% url 'material' %}">Material List</a></li>
+                                <li><a href="{% url 'material-create' %}">Add Material</a></li>
+                                <li><a href="{% url 'sub-material' %}">Sub-Material List</a></li>
+                                <li><a href="{% url 'sub-material-create' %}">Add Sub-Material</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_office %}
+                    <li {% if active == 4 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#orders">
+                            <i class="pe-7s-network"></i>
+                            <p>Orders
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="orders">
+                            <ul class="nav">
+                                <li><a href="{% url 'order' %}">Current Orders</a></li>
+                                <li><a href="{% url 'order-create' %}">Create Order</a></li>
+                                <li><a href="{% url 'sub-material-order' %}">Order Materials</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_inventory %}
+                    <li {% if active == 5 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#inventory">
+                            <i class="pe-7s-notebook"></i>
+                            <p>Inventory
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="inventory">
+                            <ul class="nav">
+                                <li><a href="{% url 'inventory' %}">Current Stock</a></li>
+                                <li><a href="{% url 'inventory-history' %}">History</a></li>
+                                <li><a href="{% url 'inventory-checkout' %}">Checkout</a></li>
+                                <li><a href="{% url 'inventory-create' %}">Add Stock</a></li>
+                                <li><a href="{% url 'inventory-extra' %}">Add Extra</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_inventory %}
+                    <li {% if active == 6 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#product">
+                            <i class="pe-7s-plugin"></i>
+                            <p>Product
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="product">
+                            <ul class="nav">
+                                <li><a href="{% url 'product-pending' %}">Pending Products</a></li>
+                                <li><a href="{% url 'product' %}">Current Stock</a></li>
+                                <li><a href="{% url 'product-history' %}">History</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_finance %}
+                    <li {% if active == 7 %}class="active" {% endif %}>
+                        <a data-toggle="collapse" href="#billing">
+                            <i class="pe-7s-credit"></i>
+                            <p>Billing
+                               <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="billing">
+                            <ul class="nav">
+                                <li><a href="{% url 'bill-create' %}">All the Bills</a></li>
+                                <li><a href="{% url 'bill' %}">Transaction Record</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if request.user.profile.is_admin %}
+                    <li {% if active == 8 %}class="active" {% endif %}>
+                        <a href="{% url 'calendar' %}">
+                            <i class="pe-7s-date"></i>
+                            <p>Calendar</p>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

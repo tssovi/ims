@@ -1,0 +1,63 @@
+{% extends 'layout/__base.html' %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="content">
+                                    <div class="toolbar">
+                                    </div>
+                                    <div class="fresh-datatables">
+                                        <table id="datatables_inventory-history" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>SL</th>
+                                                    <th>Roll ID</th>
+                                                    <th>Material</th>
+                                                    <th>Quantity</th>
+                                                    <th>Type</th>
+                                                    <th>Date</th>
+                                                    <th>Managed By</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>SL</th>
+                                                    <th>Roll ID</th>
+                                                    <th>Material</th>
+                                                    <th>Quantity</th>
+                                                    <th>Type</th>
+                                                    <th>Date</th>
+                                                    <th>Managed By</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                {% for i in inventory_exchange %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ i.stock.roll_id }}</td>
+                                                    <td>{{ i.stock.sub_material.name }}</td>
+                                                    <td>{{ i.weight }}</td>
+                                                    <td>{{ i.exchange_type }}</td>
+                                                    <td>{{ i.exchange_date|date }}</td>
+                                                    <td>{{ i.created_by }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><!-- end content-->
+                            </div><!--  end card  -->
+                        </div> <!-- end col-md-12 -->
+                    </div> <!-- end row -->
+                </div>
+            </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load humanize %}
+<html lang="en">
+<head>
+    <title>Job Card</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 style="text-align: center; margin-top: 150px">Job Card</h2>
+            <hr>
+            <h5 style="text-align: center">Job Card #: {{ job_no }}</h5>
+            <h5 style="text-align: center">Job Card Created: {{ create_date }}</h5>
+            <table class="table table-bordered">
+                <tr style="text-align: center">
+                    <td colspan="2"><b>Job Name:</b> {{ order.name }}</td>
+                </tr>
+                <tr>
+                    <td><b>Client Name:</b> {{ client.name }}</td>
+                    <td><b>Purchase Order:</b> {{ order.purchase_order }}</td>
+                </tr>
+                <tr>
+                    <td><b>Item Quantity:</b> {{ order.production_amount|floatformat:"0"|intcomma }}</td>
+                    <td><b>Bill Per Item:</b> {{ order.bill_per_production|floatformat:"0"|intcomma }} BDT</td>
+                </tr>
+                <tr>
+                    <td><b>Total Bill:</b> {{ order.total_bill|floatformat:"0"|intcomma }} BDT</td>
+                    <td><b>Delivery Date:</b> {{ delivery_date }}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Material Name</th>
+                        <th>Sub Material Name</th>
+                        <th>Required Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in order_qty %}
+                        <tr>
+                            <td>{{ i.material.name }}</td>
+                            <td>{{ i.sub_material.name }}</td>
+                            <td>{{ i.required_quantity|floatformat:"0"|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

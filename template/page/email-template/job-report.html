@@ -1,0 +1,54 @@
+{% extends 'layout/__base.html' %}
+{% load humanize %}
+<head>
+    <title>Job Report</title>
+</head>
+{% block body %}
+    <div class="container">
+
+
+        <div class="row">
+            <div class="container-fluid">
+                <table class="responsive-table">
+                    <caption>Last Month Job Status Summary</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Client</th>
+                            <th scope="col">Order</th>
+                            <th scope="col">Order Placed</th>
+                            <th scope="col">Stock Status</th>
+                        </tr>
+                    </thead>
+{#                    <tfoot>#}
+{#                        <tr>#}
+{#                            <td>Total Bill</td>#}
+{#                            <td id="total_receive"></td>#}
+{#                            <td id="total_pending"></td>#}
+{#                        </tr>#}
+{#                    </tfoot>#}
+                    <tbody>
+                        {% for i in jobs %}
+                            <tr>
+                                <th scope="row">{{ i.client.name }}</th>
+                                <td data-title="Order">{{ i.name }}</td>
+                                <td data-title="Order Placed">{{ i.created_at }}</td>
+                                {% if i.is_shipped %}
+                                    <td data-title="Stock Status">Shipped</td>
+                                {% elif i.is_produced %}
+                                    <td data-title="Stock Status">Produced</td>
+                                {% elif i.is_in_production %}
+                                    <td data-title="Stock Status">In Production</td>
+                                {% else %}
+                                    <td data-title="Stock Status">N/A</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layout/__base.html' %}
+{% load staticfiles %}
+
+{% block body %}
+
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Asia Foils</a>
+        </div>
+        <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+{#                <li>#}
+{#                   <a href="{% url 'signup' %}">#}
+{#                        Register#}
+{#                    </a>#}
+{#                </li>#}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="black" data-image="{% static 'img/beautiful-sky-facebook-cover-photo.jpg' %}">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                            <div class="card">
+                                <div class="header text-center">Login</div>
+                                <div class="content">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" placeholder="User Name" class="form-control" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" placeholder="Password" class="form-control" name="password">
+                                    </div>
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" class="btn btn-fill btn-warning btn-wd">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    	<footer class="footer footer-transparent">
+            <div class="container">
+                <p class="copyright text-center">
+                    &copy; 2017 <a href="http://www.misfit.tech">Misfit Technologoies Limited</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+{% endblock %}

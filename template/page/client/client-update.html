@@ -1,0 +1,46 @@
+{% extends 'layout/__base.html' %}
+{% load math %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="header">Update Client</div>
+                                <div class="content">
+                                    <form method="post" action="{% url 'client-update' client.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input value="{{ client.name }}" type="text" placeholder="Enter Name" class="form-control" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input value="{{ client.phone_no }}" type="tel" placeholder="Enter Phone" class="form-control" name="phone">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email address</label>
+                                            <input value="{{ client.email }}" type="email" placeholder="Enter email" class="form-control" name="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input value="{{ client.address }}" type="text" placeholder="Enter Address" class="form-control" name="address">
+                                        </div>
+                                        <div class="text-right">
+                                            <button type="submit" class="btn btn-fill btn-success">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% include 'component/_footer.html' %}
+    </div>
+</div>
+{% endblock %}

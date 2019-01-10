@@ -1,0 +1,81 @@
+{% extends 'layout/__base.html' %}
+{% load humanize %}
+<head>
+    <title>Stock Report</title>
+</head>
+{% block body %}
+    <div class="container">
+
+
+        <div class="row">
+            <div class="container-fluid">
+                <table class="responsive-table">
+                    <caption>Last Month Stock Summary</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Material Name</th>
+                            <th scope="col">Avilable Weight</th>
+                            <th scope="col">Stock Status</th>
+                        </tr>
+                    </thead>
+{#                    <tfoot>#}
+{#                        <tr>#}
+{#                            <td>Total Bill</td>#}
+{#                            <td id="total_receive"></td>#}
+{#                            <td id="total_pending"></td>#}
+{#                        </tr>#}
+{#                    </tfoot>#}
+                    <tbody>
+                        {% for i in materials_stock %}
+                            <tr>
+                                <th scope="row">{{ i.sub_material__name }}</th>
+                                <td data-title="Avilable Weight">{{ i.total_weight }}</td>
+                                <td data-title="Stock Status">{{ i.status }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+                <div class="container-fluid">
+                    <table class="responsive-table">
+                        <caption>Last Month Stock History</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Material Name</th>
+                                <th scope="col">Roll ID</th>
+                                <th scope="col">Weight (In KG)</th>
+                                <th scope="col">Exchange Type</th>
+                                <th scope="col">Exchange Date</th>
+                            </tr>
+                        </thead>
+    {#                    <tfoot>#}
+    {#                        <tr>#}
+    {#                            <td>Total Bill</td>#}
+    {#                            <td id="total_receive"></td>#}
+    {#                            <td id="total_pending"></td>#}
+    {#                        </tr>#}
+    {#                    </tfoot>#}
+                        <tbody>
+                            {% for i in materials_stock_history %}
+                                <tr>
+                                    <th scope="row">{{ i.stock.sub_material.name }}</th>
+                                    <th data-title="Roll ID">{{ i.stock.roll_id }}</th>
+                                    <td data-title="Weight">{{ i.weight }}</td>
+                                    <td data-title="Exchange Type">{{ i.exchange_type }}</td>
+                                    <td data-title="Exchange Date">{{ i.exchange_date }}</td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+    </div>
+{% endblock %}

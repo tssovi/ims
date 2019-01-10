@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice Receipt</title>
+
+    <style>
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .invoice-box table tr td:nth-child(2) {
+            text-align: right;
+        }
+
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.top table td.title {
+            font-size: 45px;
+            /*line-height: 45px;*/
+            color: #333;
+        }
+
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+        }
+
+        .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            /*text-align: center;*/
+        }
+
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.item td{
+            border-bottom: 1px solid #eee;
+            /*text-align: center;*/
+        }
+
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <h3>Asia Foils</h3>
+                            </td>
+                            <td>
+                                Invoice #: {{ invoiceNo }}<br>
+                                Created: {{ date }}<br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="1">
+                    <table>
+                        <tr>
+                            <td>
+                                {{ client.address }}
+                            </td>
+
+                            <td>
+                                {{ client.name }}<br>
+                                {{ client.email }}<br>
+                                {{ client.phone_no }}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="heading">
+                <td style="text-align: right">
+                    Receive Amount
+                </td>
+            </tr>
+
+            <tr class="item">
+                <td style="text-align: right">
+                    {{ rcvAmount }}
+                </td>
+            </tr>
+            <tr class="total">
+
+                <td style="text-align: right">
+                   Total: {{ rcvAmount }}
+                </td>
+            </tr>
+            <tr></tr>
+            <tr ></tr>
+            <tr>
+                <table style="margin-top: 50px !important;">
+                    <tr>
+                        <td style="text-align: left">___________________________</td>
+                        <td style="text-align: right">___________________________</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left">Authorised By</td>
+                        <td style="text-align: right">Received By</td>
+                    </tr>
+                </table>
+            </tr>
+
+
+        </table>
+    </div>
+</body>
+</html>

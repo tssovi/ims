@@ -1,0 +1,57 @@
+{% for i in orders %}
+    <div class="col-md-6">
+        <div class="card card-user">
+            <a href="{% url 'order-update' i.id %}" class="btn btn-simple btn-danger btn-icon edit" style="position: absolute; top: 0; right: 25px"><i class="fa fa-2x fa-edit"></i></a>
+            <div class="content">
+                <div class="text-center">
+                    <h4 class="title">{{ i.client }}</h4>
+                    <h5 class="title">{{ i.name }}</h5>
+                    <h5 class="title">Requires {{ i.amount}} unit with BDT {{ i.bill_per_production }} per unit</h5>
+                    <h6 class="title"><i class="fa fa-calendar"></i>{{ i.delivery_date }}</h6>
+                </div>
+                <hr>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <th>Sub Material</th>
+                            <th>Required</th>
+{#                            <th>Status</th>#}
+                        </thead>
+                        <tbody class="order">
+                        {% for j in order_quantity %}
+                            {% if j.order_id == i.id %}
+                            <tr>
+                                <td>{{ j.sub_material.name }}</td>
+                                <td>{{ j.required_quantity }}</td>
+{#                                <td>#}
+{#                                    {% if j.is_ordered == 1 %}#}
+{#                                    <button class="btn btn-xs {% if j.is_received == 1 %} btn-success{% else %} btn-danger {% endif %} btn-fill">Received</button>#}
+{#                                    {% else %}#}
+{#                                    <button class="btn btn-xs {% if j.is_in_stock == 1 %} btn-success{% else %} btn-danger {% endif %} btn-fill">In Stock</button>#}
+{#                                    {% endif %}#}
+{#                                </td>#}
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <button class="btn btn-xs {% if i.is_in_production %}btn-success {% else %}btn-danger {% endif %}btn-fill">In Production</button>
+                    <button class="btn btn-xs {% if i.is_produced %}btn-success {% else %}btn-danger {% endif %}btn-fill">Ready</button>
+                    <button class="btn btn-xs {% if i.is_shipped %}btn-success {% else %}btn-danger {% endif %}btn-fill">Shipped</button>
+{#                    {% if i.is_paid %}#}
+{#                        <button class="btn btn-xs btn-success btn-fill">Paid</button>#}
+{#                    {% else %}#}
+{#                        {% if i.received_bill != 0 %}#}
+{#                            <button class="btn btn-xs btn-warning btn-fill">Paid</button>#}
+{#                        {% else %}#}
+{#                            <button class="btn btn-xs btn-danger btn-fill">Paid</button>#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

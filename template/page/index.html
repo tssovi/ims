@@ -1,0 +1,48 @@
+{% extends 'layout/__base.html' %}
+{% block body %}
+    <div class="wrapper">
+        {% include 'component/_sidebar.html' %}
+        <div class="main-panel">
+            {% include 'component/_navbar.html' %}
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="nav-container">
+                            <ul class="nav nav-icons" role="tablist">
+                                <li class="active">
+                                    <a href="#description-logo" role="tab" data-toggle="tab">
+                                        <i class="fa fa-list"></i><br>
+                                        Order Status
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#map-logo" role="tab" data-toggle="tab">
+                                        <i class="fa fa-bank"></i><br>
+                                        Inventory Status
+                                    </a>
+                                  </li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="description-logo">
+                                {% include 'component/_order-card.html' %}
+                            </div>
+
+
+                            <div class="tab-pane" id="map-logo">
+                                {% include 'component/_stock_list.html' %}
+                            </div>
+                        </div> <!-- end tab content -->
+
+                    </div> <!-- end col-md-8 -->
+
+                </div> <!-- end row -->
+                    </div>
+                </div>
+            {% include 'component/_footer.html' %}
+        </div>
+    </div>
+{% endblock %}
